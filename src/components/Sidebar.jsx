@@ -2,30 +2,24 @@ import { NavLink } from "react-router-dom"
 
 function Sidebar() {
     return (
-        <div style={{
-            position: "fixed",
-            top: "34px",
-            left: 0,
-            height: "100%",
-            width: "160px",
-            background: "#403F3F",
-            paddingTop: "40px",
-            fontSize: "24px",
-        }}
-            className="sidebar-shadow d-flex flex-column justify-content-between text-white d-none">
+        <div
+            className="hidden sidebar-shadow flex flex-col justify-between text-white fixed top-[34px] left-0 h-full w-[160px] bg-[#403F3F] pt-[40px] text-[24px]">
 
             <ul
                 style={{
                     listStyle: "none", fontSize: "16px"
                 }}
-                className="d-flex flex-column align-items-start justify-content-end px-3 poppins-regular">
-                <li style={{borderBottom: "1px solid #868686", width:"100%"}}><NavLink className={({ isActive }) => isActive ? "nav-link active-link" : "nav-link"} to={"/logs"}>Logs</NavLink></li>
-                <li style={{borderBottom: "1px solid #868686", width:"100%"}}><NavLink className={({ isActive }) => isActive ? "nav-link active-link" : "nav-link"} to={"/dashboard"}>Dashboard</NavLink></li>
+                className="flex flex-col items-start justify-end px-3 poppins-regular">
+                <li>
+                    <NavLink
+                        className={({ isActive }) => isActive ? "nav-link active-link border-b border-[#868686] w-full" : "nav-link border-b border-[#868686] w-full"} to={"/logs"}>
+                        Logs
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink className={({ isActive }) => isActive ? "nav-link active-link border-b border-[#868686] w-full" : "nav-link border-b border-[#868686] w-full"} to={"/dashboard"}>Dashboard</NavLink>
+                </li>
             </ul>
-
-            <div className="container-fluid d-flex align-items-center justify-content-between ">
-                
-            </div>
 
         </div>
     )

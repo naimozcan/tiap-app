@@ -19,26 +19,22 @@ import NotFound from "./pages/errors/NotFound"
 function App() {
 
   return (
-    <div style={{
-      height: "100vh", width: "100%", background: "linear-gradient(0deg,rgba(0, 0, 0, 0.43) 25%, rgba(0, 0, 0, 0) 100%)"
-    }}>
+    <div className="w-ful" style={{background: "linear-gradient(0deg,rgba(0, 0, 0, 0.43) 25%, rgba(0, 0, 0, 0) 100%)"}}>
       <MyNavbar />
-      <div style={
-        {
-          height: "100%",
-          display: "flex",
-          alignItems: "center"
-        }
-        }>
+
         <Sidebar />
-        <Routes>
-          <Route path="/" element={<Login/>}/>
-          <Route path="/signup" element={<Signup/>}/>
-          <Route path="/logs" element={<ExceptionLogs/>}/>
-          <Route path="/logs" element="./pages/"/>
-        </Routes>
-      </div>
+
+        <div id="main-content">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/logs" element={<ExceptionLogs />} />
+            <Route path="/logs" element="./pages/" />
+          </Routes>
+        </div>
+
       <MyFooter />
+
     </div>
   )
 }
