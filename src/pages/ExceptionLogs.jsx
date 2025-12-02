@@ -2,7 +2,7 @@
 function ExceptionLogs() {
   return (
     <div>
-      
+      wellcome
     </div>
   )
 }

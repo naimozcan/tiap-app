@@ -5,7 +5,7 @@ function MyFooter() {
   return (
     <div style={
       {
-        height: "34px",
+        height: "20px",
         width: "100%",
         backgroundColor: "#403f3f",
         position: "fixed",

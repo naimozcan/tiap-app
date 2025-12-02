@@ -1,9 +1,11 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, Link } from "react-router-dom"
+import addBtn from "../assets/add-btn.png"
+import settingsBtn from "../assets/settings icon.png"
 
 function Sidebar() {
     return (
         <div
-            className="hidden sidebar-shadow flex flex-col justify-between text-white fixed top-[34px] left-0 h-full w-[160px] bg-[#403F3F] pt-[40px] text-[24px]">
+            className="sidebar-shadow pb-10 flex flex-col justify-between text-white fixed top-[20px] left-0 h-full w-[120px] bg-[#403F3F] pt-[40px] text-[24px]">
 
             <ul
                 style={{
@@ -20,6 +22,11 @@ function Sidebar() {
                     <NavLink className={({ isActive }) => isActive ? "nav-link active-link border-b border-[#868686] w-full" : "nav-link border-b border-[#868686] w-full"} to={"/dashboard"}>Dashboard</NavLink>
                 </li>
             </ul>
+
+            <div className="flex justify-between align-center px-3">
+                <Link><img src={settingsBtn} alt="" /></Link>
+                <Link><img src={addBtn} alt="" /></Link>
+            </div>
 
         </div>
     )
