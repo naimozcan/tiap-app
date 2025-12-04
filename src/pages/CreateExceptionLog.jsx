@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import service from "./services/config.services"
 
-
 function CreateExceptionLog() {
 
   const { toasts, setToast, createToast } = useContext(ToastContext)
@@ -23,7 +22,8 @@ function CreateExceptionLog() {
   const [availableRootCauses, setAvailableRootCauses] = useState(null)
   const [availableReplacedLocations, setAvailableReplacedLocations] = useState(null)
   const [availableExceptionLocations, setAvailableExceptionLocations] = useState(null)
-  const [isBtnDisabled, setIsBtnDisabled] = useState(false)
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true)
+  const [showCancelConfirm, setShowCancelConfirm] = useState()
 
   const [formInput, setFormInput] = useState({
     receivedAs: "",
@@ -57,9 +57,13 @@ function CreateExceptionLog() {
   // *************************************************************************************************
 
   useEffect(() => {
-    task &&
+    if(task){
       setMaxQty(Number(task.processedQty))
-
+      setIsBtnDisabled(false)
+    } else {
+      setMaxQty(0)
+      setIsBtnDisabled(true)
+    }
   }, [task])
 
 
@@ -353,6 +357,39 @@ function CreateExceptionLog() {
 
   // *************************************************************************************************
 
+  const handleCancel = () => {
+   const resetForm = { receivedAs: "",
+    orderNo: "",
+    skuNo: "",
+    skuQty: "",
+    exceptionType: "",
+    occurOn: "",
+    rootCause: "",
+    department: "",
+    foundBy: "",
+    status: "",
+    replacedFrom: "",
+    fakeLocation: "",
+    handledBy: "",
+    errorBy: "",
+    notes: ""}
+
+    setFormInput(resetForm)
+
+    navigate(-1)
+  }
+
+  // *************************************************************************************************
+
+  const handleShowConfirm = (e) => {
+    e.preventDefault()
+
+    setShowCancelConfirm(true)
+
+  }
+
+  // *************************************************************************************************
+
   const handleImageChange = async (e) => {
 
     const imageToUpload = e.target.files[0]
@@ -424,13 +461,13 @@ function CreateExceptionLog() {
 
       const response = await service.post('/exceptions', newException)
 
-      createToast("success", "Exception created successfully.")
+      createToast("success", response.data.message)
       navigate("/logs")
 
     } catch (error) {
 
-      console.log(error)
-      createToast("error", "Error occurred.")
+      console.log(error.response.data.errorMessage)
+      createToast("error", error.response.data.errorMessage)
 
     } finally {
       setIsBtnDisabled(false)
@@ -444,6 +481,7 @@ function CreateExceptionLog() {
 
   return (
     <div className="px-10 pt-3">
+
       <div className="rounded-[36px] min-w-[350px] bg-[#F6F6F6] bottom-shadow p-8">
 
         <div>
@@ -484,7 +522,7 @@ function CreateExceptionLog() {
 
                   <h6 className="mb-2">Order No</h6>
 
-                  <input type="text" value={formInput.orderNo} name="orderNo" placeholder="Example: WON20230125000001E" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                  <input required type="text" value={formInput.orderNo} name="orderNo" placeholder="Example: WON20230125000001E" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                 </div>
 
@@ -492,7 +530,7 @@ function CreateExceptionLog() {
 
                   <h6 className="mb-2">SKU No</h6>
 
-                  <input type="text" value={formInput.skuNo} name="skuNo" placeholder="Example: 156210" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                  <input required type="text" value={formInput.skuNo} name="skuNo" placeholder="Example: 156210" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                 </div>
 
@@ -500,7 +538,7 @@ function CreateExceptionLog() {
 
                   <h6 className="mb-2">Exception Type</h6>
 
-                  <select type="text" name="exceptionType" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
+                  <select required type="text" name="exceptionType" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
                     <option value="" className="text-gray-500">exception type...</option>
                     <option value="damaged">Damaged</option>
                     <option value="missing">Missing</option>
@@ -515,7 +553,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Quantity</h6>
 
-                      <input type="number" min={0} max={maxQty} value={formInput.skuQty} name="skuQty" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                      <input required type="number" min={0} max={maxQty} value={formInput.skuQty} name="skuQty" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                     </div>
 
@@ -524,7 +562,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Zone</h6>
 
-                      <input type="text" disabled={true} value={taskCollection.zone} name="zone" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                      <input type="text" disabled={true} value={taskCollection ? taskCollection.zone :""} name="zone" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                     </div>
 
@@ -540,7 +578,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Root Cause</h6>
 
-                      <select type="text" name="rootCause" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
+                      <select required type="text" name="rootCause" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
                         <option value="" className="text-gray-500">select route cause......</option>
                         {availableRootCauses &&
 
@@ -556,7 +594,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Department</h6>
 
-                      <input type="text" disabled={true} value={taskCollection.employee.department} name="location" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                      <input type="text" disabled={true} value={taskCollection ? taskCollection.employee.department : ""} name="location" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                     </div>
 
@@ -564,7 +602,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">SKU Price - €</h6>
 
-                      <input type="text" disabled={true} value={sku.price} name="skuPrice" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                      <input type="text" disabled={true} value={sku ? sku.price : 0 } name="skuPrice" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                     </div>
 
@@ -572,7 +610,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Total Cost - €</h6>
 
-                      <input type="text" disabled={true} value={sku.price * formInput.skuQty} name="totalCost" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                      <input type="text" disabled={true} value={sku ? sku.price * formInput.skuQty : 0} name="totalCost" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                     </div>
 
@@ -580,7 +618,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Found by</h6>
 
-                      <input type="email" placeholder="example: adam.johnson01@company.com" value={formInput.foundBy} name="foundBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                      <input required type="email" placeholder="example: adam.johnson01@company.com" value={formInput.foundBy} name="foundBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                     </div>
 
@@ -588,7 +626,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Handled by</h6>
 
-                      <input type="email" placeholder="example: adam.johnson01@company.com" value={formInput.handledBy} name="handledBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                      <input required type="email" placeholder="example: adam.johnson01@company.com" value={formInput.handledBy} name="handledBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                     </div>
 
@@ -596,7 +634,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Error by</h6>
 
-                      <input type="text" disabled={true} value={taskCollection.employee.email} name="errorBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+                      <input required type="text" disabled={true} value={taskCollection ? taskCollection.employee.email : ""} name="errorBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
 
                     </div>
 
@@ -604,11 +642,11 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Status</h6>
 
-                      <select type="text" name="status" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
+                      <select required type="text" name="status" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
                         <option value="" className="text-gray-500">status</option>
                         <option value="handled">Handled</option>
                         <option value="replaced">Replaced</option>
-                        <option value="irrecoverible">Irrecoverible</option>
+                        <option value="irrecoverable">Irrecoverable</option>
                         <option value="backlog">Backlog</option>
                       </select>
 
@@ -623,7 +661,7 @@ function CreateExceptionLog() {
 
                       <h6 className="mb-2">Replaced Cell</h6>
 
-                      <select type="text" name="fakeLocation" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
+                      <select type="text" name="replacedFrom" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
                         <option value="" className="text-gray-500">select replace location......</option>
                         {availableReplacedLocations &&
 
@@ -663,14 +701,14 @@ function CreateExceptionLog() {
                 </div>}
                 {task &&
                   <>
-                  
-                <div className="mt-5">
-                  <input required type="file" accept="image/*" placeholder="Choose an image" onChange={handleImageChange} className="flex cursor-pointer items-center w-full h-9 mb-3 text-[11px] p-2 bg-[#E0E0E0] rounded-lg px-3" />
-                </div>
 
-                <div className="mt-5">
-                  <input type="text" placeholder="Notes..." name="notes" onChange={handleChange} className="flex cursor-pointer items-center w-full h-9 mb-3 text-[11px] p-2 bg-[#E0E0E0] rounded-lg px-3" />
-                </div>
+                    <div className="mt-5">
+                      <input required type="file" accept="image/*" placeholder="Choose an image" onChange={handleImageChange} className="flex cursor-pointer items-center w-full h-9 mb-3 text-[11px] p-2 bg-[#E0E0E0] rounded-lg px-3" />
+                    </div>
+
+                    <div className="mt-5">
+                      <input type="text" placeholder="Notes..." name="notes" onChange={handleChange} className="flex cursor-pointer items-center w-full h-9 mb-3 text-[11px] p-2 bg-[#E0E0E0] rounded-lg px-3" />
+                    </div>
 
                   </>
                 }
@@ -680,14 +718,32 @@ function CreateExceptionLog() {
             </div>
 
             <div className="flex gap-2 justify-end mt-3">
-              <button className="bg-red-400 px-3 py-1 rounded-lg">Cancel</button>
+              <button onClick={handleShowConfirm} className="bg-red-400 px-3 py-1 rounded-lg">Cancel</button>
               <button disabled={isBtnDisabled} type="submit" className=" bg-zinc-500 px-3 py-1 rounded-lg">Submit</button>
             </div>
 
-          </form>
 
+
+          </form>
         </div>
       </div>
+
+      {
+        showCancelConfirm &&
+        <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div class="p-6 rounded-xl shadow-lg bg-white">
+          <p className="w-full mb-4">Are you sure to cancel?</p>
+          <div className="flex items-center justify-between">
+              <button onClick={() => {
+                setShowCancelConfirm(false)
+              }} className=" bg-zinc-500 px-3 py-1 rounded-lg">Go Back</button>
+            <button onClick={handleCancel} className="bg-red-400 px-3 py-1 rounded-lg">Yes</button>
+          </div>
+        </div>
+        
+      </div>
+      }
+
     </div>
   )
 }

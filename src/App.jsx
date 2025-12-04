@@ -1,20 +1,25 @@
-import axios from "axios"
 import { useContext, useEffect, useState } from "react"
+
 import Loading from "./pages/Loading"
 import InternalServerError from "./pages/errors/InternalServerError"
 import Unauthorized from "./pages/errors/Unauthorized"
+import NotFound from "./pages/errors/NotFound"
+
 import MyNavbar from "./components/MyNavbar"
 import Sidebar from "./components/Sidebar"
 import MyFooter from "./components/MyFooter"
 import { Route, Routes } from "react-router-dom"
+
 import CreateExceptionLog from "./pages/CreateExceptionLog"
-import ExceptionDetails from "./pages/ExceptionDetails"
 import ExceptionLogs from "./pages/ExceptionLogs"
+import ExceptionDetails from "./pages/ExceptionDetails"
+import EditException from "./pages/EditException"
+
+import CreateRootCause from "./pages/CreateRootCause"
 import RootCauses from "./pages/RootCauses"
 import RootCauseDetails from "./pages/RootCauseDetails"
 import Login from "./pages/auth/Login"
 import Signup from "./pages/auth/Signup"
-import NotFound from "./pages/errors/NotFound"
 import { AuthContext } from "./contexts/auth.context"
 import Profile from "./pages/Profile"
 import OrderDetails from "./pages/OrderDetails"
@@ -22,8 +27,10 @@ import Orders from "./pages/Orders"
 import RouteProtection from "./pages/RouteProtection"
 import MyToast from "./components/MyToast"
 import { ToastContext } from "./contexts/toast.context"
-import CreateRootCause from "./pages/CreateRootCause"
 import Dashboard from "./pages/Dashboard"
+import LocationDetails from "./pages/LocationDetails"
+import SKUDetails from "./pages/SKUDetails"
+
 
 function App() {
 
@@ -53,8 +60,11 @@ function App() {
           <Route path={"/signup"} element={<Signup />}/>
           <Route path={"/profile"} element={<RouteProtection><Profile /></RouteProtection>} />
 
+          <Route path={"/profile"} element={<RouteProtection><Profile /></RouteProtection>} />
+
           <Route path={"/logs"} element={<RouteProtection><ExceptionLogs /></RouteProtection>} />
           <Route path={"/logs/:_id"} element={<RouteProtection><ExceptionDetails /></RouteProtection>} />
+          <Route path={"/logs/:_id/edit"} element={<RouteProtection><EditException /></RouteProtection>} />
           <Route path={"/logs/create"} element={<RouteProtection><CreateExceptionLog /></RouteProtection>} />
 
           <Route path={"/dashboard"} element={<RouteProtection><Dashboard /></RouteProtection>} />
@@ -63,11 +73,13 @@ function App() {
           <Route path={"/root-causes/:_id"} element={<RouteProtection><RootCauseDetails /></RouteProtection>} />
           <Route path={"/root-causes/create"} element={<RouteProtection><CreateRootCause /></RouteProtection>} />
 
+          <Route path={"/locations/:_id"} element={<RouteProtection><Orders /></RouteProtection>} />
+          <Route path={"/orders"} element={<RouteProtection><Orders /></RouteProtection>} />
           <Route path={"/orders"} element={<RouteProtection><Orders /></RouteProtection>} />
           <Route path={"/order/:_id"} element={<RouteProtection><OrderDetails /></RouteProtection>} />
 
           <Route path={"/500"} element={<InternalServerError />} />
-          <Route path={"/404"} element={<NotFound />} />
+          <Route path={"*"} element={<NotFound />} />
           <Route path={"/unauthorized"} element={<Unauthorized />} />
         </Routes>
       </div>
