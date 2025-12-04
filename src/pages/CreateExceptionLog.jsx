@@ -20,9 +20,10 @@ function CreateExceptionLog() {
   const [imgURL, setImgURL] = useState(null)
   const [imgFile, setImgFile] = useState(null)
   const [maxQty, setMaxQty] = useState(null)
-  const [isFirstStepDone, setIsFirstStepDone] = useState(false)
   const [availableRootCauses, setAvailableRootCauses] = useState(null)
-  const [isBtnDisabled, setIsBtnDisabled] = useState(true)
+  const [availableReplacedLocations, setAvailableReplacedLocations] = useState(null)
+  const [availableExceptionLocations, setAvailableExceptionLocations] = useState(null)
+  const [isBtnDisabled, setIsBtnDisabled] = useState(false)
 
   const [formInput, setFormInput] = useState({
     receivedAs: "",
@@ -45,34 +46,21 @@ function CreateExceptionLog() {
   // *************************************************************************************************
 
   useEffect(() => {
-
-    const newException = {
-
-      receivedAs: formInput.receivedAs,
-      order: order ? order._id : "",
-      sku: sku ? sku._id : "",
-      quantity: formInput.skuQty,
-      type: formInput.exceptionType,
-      taskType: formInput.occurOn,
-      task: task ? task._id : "",
-      taskCollection: taskCollection ? taskCollection._id : "",
-      zone: taskCollection ? taskCollection.zone : "",
-      location: task ? task.location._id : "",
-      rootcause: rootcause ? rootcause._id : "",
-      department: formInput.department,
-      replacedFrom: formInput.replacedFrom,
-      exceptionLocation: formInput.fakeLocation,
-      skuPrice: sku ? sku.price : null,
-      totalCost: sku ? formInput.qty * sku.price : "",
-      errorBy: taskCollection ? taskCollection.employee._id : "",
-      foundBy: foundBy ? foundBy._id : "",
-      handledBy: handledBy ? handledBy._id : "",
-      status: formInput.status,
-      notes: formInput.notes,
-      image: imgURL ? imgURL : ""
-
+    if (formInput.status === "replaced") {
+      setIsReplaced(true)
+    } else {
+      setIsReplaced(false)
     }
-  }, [formInput, order, sku, task, taskCollection])
+  }, [formInput.status])
+
+
+  // *************************************************************************************************
+
+  useEffect(() => {
+    task &&
+      setMaxQty(Number(task.processedQty))
+
+  }, [task])
 
 
   // *************************************************************************************************
@@ -206,22 +194,6 @@ function CreateExceptionLog() {
 
   }, [taskCollection, sku])
 
-  // *************************************************************************************************
-
-  useEffect(() => {
-    if (formInput.status === "replaced") {
-      setIsReplaced(true)
-    }
-  }, [formInput.status])
-
-
-  // *************************************************************************************************
-
-  useEffect(() => {
-    task &&
-      setMaxQty(Number(task.processedQty))
-
-  }, [task])
 
   // *************************************************************************************************
 
@@ -281,7 +253,7 @@ function CreateExceptionLog() {
 
   // *************************************************************************************************
 
-  // *** Get Employee (Found by) ***
+  // *** Get Employee (Handled by) ***
 
   useEffect(() => {
 
@@ -306,8 +278,69 @@ function CreateExceptionLog() {
 
   // *************************************************************************************************
 
+  // *** Get Exception Locations ***
+
+  useEffect(() => {
+
+    service.get('/locations', {
+      params: {
+        purpose: "exception"
+      }
+    })
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setAvailableExceptionLocations(res.data)
+          console.log("Available exception locations: ", res.data)
+        } else {
+          console.log("No available location found.")
+        }
+      })
+      .catch(((error) => {
+        console.log(error)
+      }))
+
+  }, [])
+
+  // *************************************************************************************************
+
+  // *** Get Replace Locations ***
+
+  useEffect(() => {
+
+    if (!sku) {
+      setAvailableReplacedLocations(null)
+      return
+    }
+
+    service.get('/locations', {
+      params: {
+        skuId: sku._id
+      }
+    })
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setAvailableReplacedLocations(res.data)
+          console.log("Available replace locations: ", res.data)
+        } else {
+          console.log("No available replace location found.")
+        }
+      })
+      .catch(((error) => {
+        console.log(error)
+      }))
+
+  }, [sku])
+
+
+  // *************************************************************************************************
+
   const handleChange = (e) => {
     const { name, value } = e.target
+
+    if (name === "rootCause") {
+      const selectedRootCause = availableRootCauses.find(rootCause => rootCause.title === value)
+      setRootcause(selectedRootCause)
+    }
 
     const holder = {
       ...formInput,
@@ -329,13 +362,15 @@ function CreateExceptionLog() {
 
         setImgFile(imageToUpload)
 
-        console.log(`Image choosen, file name: ${imgFile.name}`)
+        console.log(`Image choosen, file name: ${imageToUpload.name}`)
 
         const formData = new FormData()
 
-        formData.append("image", imgFile)
+        formData.append("image", imageToUpload)
 
         const response = await service.post("/uploads", formData)
+
+        console.log(response.data)
 
         setImgURL(response.data.url)
 
@@ -348,13 +383,56 @@ function CreateExceptionLog() {
 
   // *************************************************************************************************
 
-  const handleCreateException = async () => {
+  const handleCreateException = async (e) => {
+
+    e.preventDefault()
+
+    setIsBtnDisabled(true)
+
+    setIsUploading(true)
 
     try {
-      await service.post('/exceptions', newException)
+
+      const newException = {
+
+        receivedAs: formInput.receivedAs,
+        order: order ? order._id : "",
+        sku: sku ? sku._id : "",
+        quantity: formInput.skuQty,
+        type: formInput.exceptionType,
+        taskType: formInput.occurOn,
+        task: task ? task._id : "",
+        taskCollection: taskCollection ? taskCollection._id : "",
+        zone: taskCollection ? taskCollection.zone : "",
+        location: task ? task.location._id : "",
+        rootcause: rootcause ? rootcause._id : "",
+        department: "outbound",
+        replacedFrom: formInput.replacedFrom,
+        exceptionLocation: formInput.fakeLocation,
+        skuPrice: sku ? sku.price : null,
+        totalCost: sku ? formInput.skuQty * sku.price : 0,
+        errorBy: taskCollection ? taskCollection.employee._id : "",
+        foundBy: foundBy ? foundBy._id : "",
+        handledBy: handledBy ? handledBy._id : "",
+        status: formInput.status,
+        notes: formInput.notes,
+        image: imgURL ? imgURL : ""
+
+      }
+
+      console.log(newException)
+
+      const response = await service.post('/exceptions', newException)
+
+      createToast("success", "Exception created successfully.")
+
     } catch (error) {
+
       console.log(error)
-      createToast("error", "error")
+      createToast("error", "Error occurred.")
+    } finally {
+      setIsBtnDisabled(false)
+      setIsUploading(false)
     }
 
   }
@@ -363,14 +441,12 @@ function CreateExceptionLog() {
 
 
   return (
-    <div className="p-20">
+    <div className="px-10 pt-3">
       <div className="rounded-[36px] min-w-[350px] bg-[#F6F6F6] bottom-shadow p-8">
 
         <div>
 
-          <form onSubmit={() => {
-            handleCreateException()
-          }}>
+          <form onSubmit={handleCreateException}>
 
             <h2 className="text-xl mb-4">New Exception</h2>
 
@@ -482,12 +558,120 @@ function CreateExceptionLog() {
 
                     </div>
 
+                    <div className="xs:col-span-12 lg:col-span-6">
+
+                      <h6 className="mb-2">SKU Price - €</h6>
+
+                      <input type="text" disabled={true} value={sku.price} name="skuPrice" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+
+                    </div>
+
+                    <div className="xs:col-span-12 lg:col-span-6">
+
+                      <h6 className="mb-2">Total Cost - €</h6>
+
+                      <input type="text" disabled={true} value={sku.price * formInput.skuQty} name="totalCost" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+
+                    </div>
+
+                    <div className="xs:col-span-12 lg:col-span-6">
+
+                      <h6 className="mb-2">Found by</h6>
+
+                      <input type="email" placeholder="example: adam.johnson01@company.com" value={formInput.foundBy} name="foundBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+
+                    </div>
+
+                    <div className="xs:col-span-12 lg:col-span-6">
+
+                      <h6 className="mb-2">Handled by</h6>
+
+                      <input type="email" placeholder="example: adam.johnson01@company.com" value={formInput.handledBy} name="handledBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+
+                    </div>
+
+                    <div className="xs:col-span-12 lg:col-span-6">
+
+                      <h6 className="mb-2">Error by</h6>
+
+                      <input type="text" disabled={true} value={taskCollection.employee.email} name="errorBy" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" />
+
+                    </div>
+
+                    <div className="xs:col-span-12 lg:col-span-6">
+
+                      <h6 className="mb-2">Status</h6>
+
+                      <select type="text" name="status" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
+                        <option value="" className="text-gray-500">status</option>
+                        <option value="handled">Handled</option>
+                        <option value="replaced">Replaced</option>
+                        <option value="irrecoverible">Irrecoverible</option>
+                        <option value="backlog">Backlog</option>
+                      </select>
+
+                    </div>
+
+                  </>
+                }
+                {
+                  isReplaced &&
+                  <>
+                    <div className="xs:col-span-12 lg:col-span-6">
+
+                      <h6 className="mb-2">Replaced Cell</h6>
+
+                      <select type="text" name="fakeLocation" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
+                        <option value="" className="text-gray-500">select replace location......</option>
+                        {availableReplacedLocations &&
+
+                          availableReplacedLocations.map((eachLocation, index) => {
+                            return <option key={index} value={eachLocation.name}>{eachLocation.name}</option>
+                          })
+                        }
+
+                      </select>
+
+                    </div>
+                    <div className="xs:col-span-12 lg:col-span-6">
+
+                      <h6 className="mb-2">Exception Cell</h6>
+
+                      <select type="text" name="fakeLocation" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg px-3" >
+                        <option value="" className="text-gray-500">select fake location......</option>
+                        {availableExceptionLocations &&
+
+                          availableExceptionLocations.map((eachLocation, index) => {
+                            return <option key={index} value={eachLocation.name}>{eachLocation.name}</option>
+                          })
+                        }
+                      </select>
+
+                    </div>
                   </>
                 }
 
               </div>
 
-              <div className="xs:col-span-12 lg:col-span-4">
+              <div className="xs:col-span-12 lg:col-span-4 p-8">
+
+
+                {imgFile && <div className="w-full h-auto flex items-center justify-center rounded-lg">
+                  <img src={imgURL ? imgURL : ""} alt="exception image" className="max-h-[40%]" />
+                </div>}
+                {task &&
+                  <>
+                  
+                <div className="mt-5">
+                  <input required type="file" accept="image/*" placeholder="Choose an image" onChange={handleImageChange} className="flex cursor-pointer items-center w-full h-9 mb-3 text-[11px] p-2 bg-[#E0E0E0] rounded-lg px-3" />
+                </div>
+
+                <div className="mt-5">
+                  <input type="text" placeholder="Notes..." name="notes" onChange={handleChange} className="flex cursor-pointer items-center w-full h-9 mb-3 text-[11px] p-2 bg-[#E0E0E0] rounded-lg px-3" />
+                </div>
+
+                  </>
+                }
 
               </div>
 
@@ -497,6 +681,7 @@ function CreateExceptionLog() {
               <button className="bg-red-400 px-3 py-1 rounded-lg">Cancel</button>
               <button disabled={isBtnDisabled} type="submit" className=" bg-zinc-500 px-3 py-1 rounded-lg">Submit</button>
             </div>
+
           </form>
 
         </div>
