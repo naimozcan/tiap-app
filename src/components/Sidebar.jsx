@@ -28,7 +28,7 @@ function Sidebar() {
   }, [showSettings])
 
   return (
-    <div className="sidebar-shadow pb-10 flex flex-col justify-between text-white fixed top-[20px] left-0 h-full w-[120px] bg-[#403F3F] pt-[40px] text-[24px]">
+    <div className="sidebar-shadow pb-10 flex flex-col justify-between text-white fixed top-[20px] left-0 h-full w-[120px] bg-[#403F3F] pt-[40px] text-[24px] z-40">
       <ul style={{ listStyle: "none", fontSize: "16px" }} className="flex flex-col items-start justify-end px-3 poppins-regular">
         <li>
           <NavLink
@@ -53,9 +53,9 @@ function Sidebar() {
       </ul>
       <div className="flex flex-col items-center" ref={settingsRef}>
         {showSettings && (
-          <div className="flex flex-col bg-zinc-800 h-20 w-[80%] mb-3 p-2 rounded-md">
-            <Link to={"/root-causes"} onClick={handleShowSettings} className="text-[12px]">Rootcauses</Link>
-            <Link to={"/root-causes/create"} onClick={handleShowSettings} className="text-[12px]">New R.C.</Link>
+          <div className="fixed bottom-14 left-8 bg-zinc-800 h-40 w-40 mb-3 p-3 rounded-lg flex flex-col">
+            <Link to={"/root-causes"} onClick={handleShowSettings} className="text-[12px]"> Root Causes</Link>
+            <Link to={"/root-causes/create"} onClick={handleShowSettings} className="text-[12px]">  New Root Cause </Link>
           </div>
         )}
         <div className="flex w-full justify-between align-center px-3">

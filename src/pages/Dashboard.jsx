@@ -130,7 +130,7 @@ function Dashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-xl">Loading dashboard...</p>
+        <p className="text-md">Loading dashboard...</p>
       </div>
     )
   }
@@ -143,22 +143,22 @@ function Dashboard() {
 
   return (
     <div className="p-6 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Exception Analytics - Last 30 Days</h1>
+      <h1 className="text-xl font-bold mb-6">Exception Analytics - Last 30 Days</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-zinc-100 cursor-pointer p-4 rounded-lg shadow">
           <h3 className="text-sm text-gray-600">Total Exceptions</h3>
-          <p className="text-2xl font-bold">{lastMonthData.length}</p>
+          <p className="text-lg font-bold">{lastMonthData.length}</p>
         </div>
         <div className="bg-zinc-100 cursor-pointer p-4 rounded-lg shadow">
           <h3 className="text-sm text-gray-600">Total Cost</h3>
-          <p className="text-2xl font-bold">
+          <p className="text-lg font-bold">
             ${lastMonthData.reduce((sum, exc) => sum + (exc.totalCost || 0), 0).toFixed(2)}
           </p>
         </div>
         <div className="bg-zinc-100 cursor-pointer p-4 rounded-lg shadow">
           <h3 className="text-sm text-gray-600">Avg Cost per Exception</h3>
-          <p className="text-2xl font-bold">
+          <p className="text-lg font-bold">
             ${lastMonthData.length > 0
               ? (lastMonthData.reduce((sum, exc) => sum + (exc.totalCost || 0), 0) / lastMonthData.length).toFixed(2)
               : '0.00'}
@@ -166,7 +166,7 @@ function Dashboard() {
         </div>
         <div className="bg-zinc-100 cursor-pointer p-4 rounded-lg shadow">
           <h3 className="text-sm text-gray-600">Most Common Type</h3>
-          <p className="text-2xl font-bold capitalize">
+          <p className="text-lg font-bold capitalize">
             {costByType.length > 0
               ? costByType.sort((a, b) => b.count - a.count)[0]?.type
               : 'N/A'}

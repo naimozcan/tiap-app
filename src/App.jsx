@@ -93,8 +93,17 @@ function App() {
 
     {/* *** Only Desktop Warning *** */}
 
-    <div id="only mobile" className="h-[100vh] w-full bg-gray-900 text-zinc-100 flex items-center justify-center">
-      
+    <div id="only-mobile" className="h-[100vh] w-full flex-col bg-gray-900 text-zinc-100 flex items-center justify-center p-20">
+
+      <img src={logoIcon} alt="" />
+      <h1 className="text-[30px]">Ooops!</h1>
+      <p className="text-[17px] text-center">Unfortunately, Tiap is a desktop-first application... <br /> For the best experience, we are keeping you in the desktop version!</p>
+
+      <a className="mt-5" href="https://github.com/naimyasirozcan/tiap-app" target="_blank">
+
+      <span ><img className="h-7" src={logoText} alt="" /></span> 
+
+      </a>
     </div>
 
 

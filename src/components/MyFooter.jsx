@@ -13,7 +13,7 @@ function MyFooter() {
         left: 0,
       }
     }
-      className="flex items-center justify-end pr-">
+      className="flex items-center justify-end z-40">
 
 
       <ul style={

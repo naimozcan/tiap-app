@@ -57,7 +57,7 @@ function RootCauseDetails() {
   return (
     <div className="p-10 flex flex-col gap-10">
 
-      <div className="w-full h-full  grid grid-cols-12 rounded-lg bg-zinc-200 xs:p-4 lg:p-10">
+      <div className="w-full h-full  grid grid-cols-12 rounded-lg bg-zinc-100 xs:p-4 lg:p-10">
 
         <div className="xs:col-span-12 lg:col-span-6  flex flex-col">
 

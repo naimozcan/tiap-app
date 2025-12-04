@@ -164,7 +164,23 @@ h1, h2, h3, h4, h5, h6 {
   font-style: normal;
 }
 
+@media (max-width: 768px) {
+  #app-screen {
+    display: none;
+  }
+  #only-mobile {
+    display: flex;
+  }
+}
 
+@media (min-width: 768px) {
+  #app {
+    display: block;
+  }
+  #only-mobile {
+    display: none;
+  }
+}
 
 @layer base {
   :root {
