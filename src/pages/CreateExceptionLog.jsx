@@ -467,7 +467,7 @@ function CreateExceptionLog() {
     } catch (error) {
 
       console.log(error.response.data.errorMessage)
-      createToast("error", error.response.data.errorMessage)
+      createToast("danger", error.response.data.errorMessage)
 
     } finally {
       setIsBtnDisabled(false)
@@ -697,7 +697,7 @@ function CreateExceptionLog() {
 
 
                 {imgFile && <div className="w-full h-auto flex items-center justify-center rounded-lg">
-                  <img src={imgURL ? imgURL : ""} alt="exception image" className="max-h-[40%]" />
+                  <img src={imgURL ? imgURL : ""} alt="exception image" className="max-h-[40%] rounded-lg " />
                 </div>}
                 {task &&
                   <>

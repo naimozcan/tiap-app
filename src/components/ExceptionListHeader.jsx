@@ -1,7 +1,7 @@
 
 function ExceptionListHeader() {
   return (
-    <div className="w-full grid grid-cols-12 gap-0 p-2">
+    <div className="w-full min-w-[1400px] grid grid-cols-12 gap-0 p-2">
 
       <div className="h-[40px]col-span-1 flex items-center justify-start text-[11px] font-black">Exception No</div>
       <div className="h-[40px]col-span-1 flex items-center justify-start text-[11px] font-black">Date</div>

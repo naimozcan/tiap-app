@@ -93,8 +93,9 @@ function EditRootCause() {
                                 </div>
 
                                 <div className="flex items-center justify-between">
-                                    <button type="button" className="mt-3 bg-zinc-500 px-3 py-1 rounded-lg" onClick={() => { navigate(-1) }}>Cancel</button>
-                                    <button type="submit" className="mt-3 bg-zinc-500 px-3 py-1 rounded-lg" >Submit</button>
+                                    
+                                    <button type="button" className="mt-3 bg-red-400 px-3 py-1 rounded-lg" onClick={() => { navigate(-1) }}>Cancel</button>
+                                    <button type="submit" className="mt-3 bg-green-400 px-3 py-1 rounded-lg" >Submit</button>
 
                                 </div>
 

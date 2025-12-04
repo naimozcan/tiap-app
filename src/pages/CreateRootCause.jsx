@@ -28,6 +28,10 @@ function CreateRootCause() {
       navigate("/root-causes")
     } catch (error) {
       console.log(error)
+      createToast("danger", error.response.data.errorMessage)
+      if(error.response.status === 401){
+        navigate("/unauthorized")
+      }
     }
   }
 

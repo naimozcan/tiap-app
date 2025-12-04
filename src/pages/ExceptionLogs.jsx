@@ -38,7 +38,7 @@ function ExceptionLogs() {
       <div className="w-full h-auto p-5">
           <ExceptionListFiltersBar searchParams={searchParams} setSearchParams={setSearchParams} />
 
-        <div className="overflow-x-auto w-fit">
+        <div className="overflow-x-auto w-full">
 
         <ExceptionListHeader />
 

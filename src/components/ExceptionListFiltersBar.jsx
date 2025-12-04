@@ -10,7 +10,7 @@ function ExceptionListFiltersBar({ searchParams, setSearchParams }) {
             setSearchParams(searchParams)
             return
         }
-        
+
         searchParams.set(name, value)
         setSearchParams(searchParams)
 
@@ -19,7 +19,7 @@ function ExceptionListFiltersBar({ searchParams, setSearchParams }) {
 
     return (
 
-        <div className="grid grid-cols-12 gap-1">
+        <div className="grid grid-cols-12 gap-1 min-w-[1400px]">
 
 
             <input type="text" name="no" placeholder="exception no" onChange={handleChange} className="col-span-1 w-full h-9 mb-3 text-[11px] bg-[#E0E0E0] rounded-lg p-3" />
