@@ -66,13 +66,13 @@ function CreateRootCause() {
 
                 <div className="flex flex-col gap-3">
 
-                  <select className=" bg-zinc-400 w-full p-3 rounded-lg" name="type" onChange={handleChange}>
+                  <select className=" bg-zinc-200 w-full p-3 rounded-lg" name="type" onChange={handleChange}>
                     <option value="" className="text-gray-500">select type...</option>
                     <option value="damaged">Damaged</option>
                     <option value="missing">Missing</option>
                   </select>
 
-                  <select className=" bg-zinc-400 w-full p-3 rounded-lg" name="task" onChange={handleChange}>
+                  <select className=" bg-zinc-200 w-full p-3 rounded-lg" name="task" onChange={handleChange}>
                     <option value="" className="text-gray-500">select task...</option>
                     <option value="picking">Picking</option>
                     <option value="packing">Packing</option>
@@ -81,8 +81,8 @@ function CreateRootCause() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <button type="submit" className="mt-3 bg-zinc-500 px-3 py-1 rounded-lg" onClick={() => { navigate(-1) }}>Cancel</button>
-                  <button type="submit" className="mt-3 bg-zinc-500 px-3 py-1 rounded-lg" >Submit</button>
+                  <button type="submit" className="mt-3 bg-red-400 px-3 py-1 rounded-lg" onClick={() => { navigate(-1) }}>Cancel</button>
+                  <button type="submit" className="mt-3 bg-green-400 px-3 py-1 rounded-lg" >Submit </button>
 
                 </div>
 

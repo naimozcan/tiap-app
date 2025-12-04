@@ -46,15 +46,15 @@ function RootCauses() {
   return (
     <div className="w-full px-5 pb-5">
 
-      <div className=" bg-zinc-400 fixed top-10 left-1/2 -translate-x-1/2 z-50 w-fit p-3 rounded-lg flex gap-6">
+      <div className=" bg-zinc-200 fixed top-10 left-1/2 -translate-x-1/2 z-50 w-fit p-3 rounded-lg flex gap-6">
 
-        <select className=" bg-zinc-400" name="type" onChange={handleChange}>
+        <select className=" bg-zinc-200" name="type" onChange={handleChange}>
           <option value="" className="text-gray-500">select type...</option>
           <option value="damaged">Damaged</option>
           <option value="missing">Missing</option>
         </select>
 
-        <select className=" bg-zinc-400" name="task" onChange={handleChange}>
+        <select className=" bg-zinc-200" name="task" onChange={handleChange}>
           <option value="" className="text-gray-500">select task...</option>
           <option value="picking">Picking</option>
           <option value="packing">Packing</option>

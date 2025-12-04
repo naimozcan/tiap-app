@@ -155,7 +155,7 @@ function Signup() {
 
 
 
-                <div className="flex justify-end"> <button type="submit" className="mt-3 bg-zinc-500 px-3 py-1 rounded-lg">Sign Up</button></div>
+                <div className="flex justify-end"> <button type="submit" className="mt-3 bg-zinc-400 px-3 py-1 rounded-lg">Sign Up</button></div>
               </form>
 
             </div>

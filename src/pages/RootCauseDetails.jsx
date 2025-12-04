@@ -57,7 +57,7 @@ function RootCauseDetails() {
   return (
     <div className="p-10 flex flex-col gap-10">
 
-      <div className="w-full h-full  grid grid-cols-12 rounded-lg bg-slate-400 xs:p-4 lg:p-10">
+      <div className="w-full h-full  grid grid-cols-12 rounded-lg bg-zinc-200 xs:p-4 lg:p-10">
 
         <div className="xs:col-span-12 lg:col-span-6  flex flex-col">
 
@@ -80,7 +80,7 @@ function RootCauseDetails() {
           <div className="flex flex-col gap-3">
             <button onClick={() => {
               navigate(`/root-causes/${_id}/edit`)
-            }} className="p-2 bg-zinc-500 rounded-lg">Edit</button>
+            }} className="p-2 bg-zinc-300 rounded-lg">Edit</button>
 
             {
               (!exceptions || exceptions.length === 0) &&
@@ -96,7 +96,7 @@ function RootCauseDetails() {
 
       </div>
 
-      <div className="w-full h-full flex items-center justify-start rounded-lg bg-slate-400 xs:p-4 lg:p-10">
+      <div className="w-full h-full flex items-center justify-start rounded-lg bg-zinc-100 xs:p-4 lg:p-10">
 
         <div className="flex flex-col">
 
@@ -124,7 +124,7 @@ function RootCauseDetails() {
             <div className="flex items-center justify-between">
               <button onClick={() => {
                 setShowDeleteConfirm(false)
-              }} className=" bg-zinc-500 px-3 py-1 rounded-lg">Go Back</button>
+              }} className=" bg-zinc-200 px-3 py-1 rounded-lg">Go Back</button>
               <button onClick={handleDelete} className="bg-red-400 px-3 py-1 rounded-lg">Yes</button>
             </div>
           </div>

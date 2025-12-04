@@ -4,12 +4,12 @@ import Loading from "./pages/Loading"
 import InternalServerError from "./pages/errors/InternalServerError"
 import Unauthorized from "./pages/errors/Unauthorized"
 import NotFound from "./pages/errors/NotFound"
-
+import logoText from "./assets/tiap-text.png"
 import MyNavbar from "./components/MyNavbar"
 import Sidebar from "./components/Sidebar"
 import MyFooter from "./components/MyFooter"
 import { Route, Routes } from "react-router-dom"
-
+import logoIcon from "./assets/tiap-icon-light.png"
 import CreateExceptionLog from "./pages/CreateExceptionLog"
 import ExceptionLogs from "./pages/ExceptionLogs"
 import ExceptionDetails from "./pages/ExceptionDetails"
@@ -38,7 +38,8 @@ function App() {
   const { toasts } = useContext(ToastContext)
     
   return (
-    <div className="w-full min-h-screen" style={{ background: "linear-gradient(0deg,rgba(0, 0, 0, 0.43) 25%, rgba(0, 0, 0, 0) 100%)" }}>
+    <>
+    <div id="app-screen" className="w-full min-h-screen" style={{ background: "linear-gradient(0deg,rgba(0, 0, 0, 0.43) 25%, rgba(0, 0, 0, 0) 100%)" }}>
 
       <MyNavbar />
 
@@ -82,12 +83,22 @@ function App() {
           <Route path={"/500"} element={<InternalServerError />} />
           <Route path={"*"} element={<NotFound />} />
           <Route path={"/unauthorized"} element={<Unauthorized />} />
+
         </Routes>
       </div>
 
       <MyFooter />
 
     </div>
+
+    {/* *** Only Desktop Warning *** */}
+
+    <div id="only mobile" className="h-[100vh] w-full bg-gray-900 text-zinc-100 flex items-center justify-center">
+      
+    </div>
+
+
+    </>
   )
 }
 

@@ -109,7 +109,7 @@ function Login() {
                 <input type="email" name="email" placeholder="employee@company.com" onChange={handleChange} className="w-full h-9 mb-3 bg-[#E0E0E0] rounded-lg p-3" />
                 <h6>Password:</h6>
                 <input type="password" name="password" placeholder="password here..." onChange={handleChange} className="w-full h-9 bg-[#E0E0E0] rounded-lg p-3" />
-                <button type="submit" className="mt-3 bg-zinc-500 px-3 py-1 rounded-lg">Login</button>
+                <button type="submit" className="mt-3 bg-zinc-400 px-3 py-1 rounded-lg">Login</button>
               </form>
             </div>
           </div>
