@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import service from './services/config.services'
+import Loading from './Loading'
 
 function Dashboard() {
   const [exceptions, setExceptions] = useState([])
@@ -128,11 +129,7 @@ function Dashboard() {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-md">Loading dashboard...</p>
-      </div>
-    )
+    return <Loading/>
   }
 
   const lastMonthData = getLastMonthData()
