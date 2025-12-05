@@ -2,6 +2,7 @@ import { ToastContext } from "@/contexts/toast.context"
 import { useContext, useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import service from "./services/config.services"
+import Loading from "./Loading"
 
 function EditRootCause() {
 
@@ -9,16 +10,12 @@ function EditRootCause() {
 
     const navigate = useNavigate()
     const { toasts, setToasts, createToast } = useContext(ToastContext)
-    const [newRootCause, setUpdatedRootCause] = useState({
-        task: "",
-        title: "",
-        type: ""
-    })
+    const [rootcause, setRootcause] = useState(null)
 
     useEffect(() => {
         service.get(`/root-causes/${_id}`)
             .then((res) => {
-                setUpdatedRootCause({
+                setRootcause({
                     task: res.data.task || "",
                     title: res.data.title || "",
                     type: res.data.type || ""
@@ -33,10 +30,10 @@ function EditRootCause() {
         e.preventDefault()
 
         try {
-            const response = await service.put(`/root-causes/${_id}`, newRootCause)
+            const response = await service.put(`/root-causes/${_id}`, rootcause)
             console.log(response)
             createToast("success", response.data.message)
-            setUpdatedRootCause({
+            setRootcause({
                 task: "",
                 title: "",
                 type: ""
@@ -50,11 +47,15 @@ function EditRootCause() {
     const handleChange = (e) => {
         const { name, value } = e.target
 
-        setUpdatedRootCause({
-            ...newRootCause,
+        setRootcause({
+            ...rootcause,
             [name]: value
         })
         console.log(name, ": ", value)
+    }
+
+    if(!rootcause){
+        return <Loading/>
     }
 
 
@@ -74,17 +75,17 @@ function EditRootCause() {
                                 <h2 className="text-xl mb-4">New Root Cause</h2>
 
                                 <h6 className="mb-2">Title:</h6>
-                                <input type="text" name="title" value={newRootCause.title} placeholder="type title here..." onChange={handleChange} className="w-full h-20 mb-3 bg-[#E0E0E0] rounded-lg p-3" />
+                                <input type="text" name="title" value={rootcause.title} placeholder="type title here..." onChange={handleChange} className="w-full h-20 mb-3 bg-[#E0E0E0] rounded-lg p-3" />
 
                                 <div className="flex flex-col gap-3">
 
-                                    <select className=" bg-zinc-200 w-full p-3 rounded-lg" name="type" value={newRootCause.type} onChange={handleChange}>
+                                    <select className=" bg-zinc-200 w-full p-3 rounded-lg" name="type" value={rootcause.type} onChange={handleChange}>
                                         <option value="" className="text-gray-500">select type...</option>
                                         <option value="damaged">Damaged</option>
                                         <option value="missing">Missing</option>
                                     </select>
 
-                                    <select className=" bg-zinc-200 w-full p-3 rounded-lg" name="task" value={newRootCause.task} onChange={handleChange}>
+                                    <select className=" bg-zinc-200 w-full p-3 rounded-lg" name="task" value={rootcause.task} onChange={handleChange}>
                                         <option value="" className="text-gray-500">select task...</option>
                                         <option value="picking">Picking</option>
                                         <option value="packing">Packing</option>
