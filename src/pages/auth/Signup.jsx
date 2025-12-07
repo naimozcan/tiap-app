@@ -99,7 +99,7 @@ function Signup() {
 
           <div className="max-w-screen-xl flex flex-col">
             <label htmlFor="sign-up-btn" className="text-xs mb-1">Already have an account?</label>
-            <button id="sign-up-btn" className="rounded-lg h-9 w-full" ><Link to={"/login"} className="no-underline">Login</Link></button>
+            <button id="sign-up-btn" className="rounded-lg h-9 w-full text-start" ><Link to={"/login"} className="underline">Login</Link></button>
           </div>
 
         </div>
