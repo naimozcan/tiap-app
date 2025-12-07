@@ -25,6 +25,7 @@ import MyToast from "./components/MyToast"
 import { ToastContext } from "./contexts/toast.context"
 import Dashboard from "./pages/Dashboard"
 import EditRootCause from "./pages/EditRootCause"
+import Redirect from "./pages/Redirect"
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
           }}
         >
           <Routes>
+            <Route path={"/"} element={<Redirect />} />
             <Route path={"/login"} element={<Login />} />
             <Route path={"/signup"} element={<Signup />} />
             <Route path={"/profile"} element={<RouteProtection><Profile /></RouteProtection>} />
