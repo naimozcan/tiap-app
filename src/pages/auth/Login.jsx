@@ -4,11 +4,12 @@ import logoIcon from "../../assets/tiap-icon-dark.png"
 import { AuthContext } from "../../contexts/auth.context"
 import axios from "axios"
 import { ToastContext } from "@/contexts/toast.context"
+import Loading from "../Loading"
 
 function Login() {
 
   const { toast, setToasts, createToast } = useContext(ToastContext)
-  const { isLoggedIn, setIsLoggedIn, loggedUserId, authenticateUser } = useContext(AuthContext)
+  const { isLoggedIn, setIsLoggedIn, isValidating, loggedUserId, authenticateUser } = useContext(AuthContext)
   const [isButtonDisabled, setIsButtonDisabled] = useState()
   const navigate = useNavigate()
   const [body, setBody] = useState({
@@ -32,7 +33,6 @@ function Login() {
     try {
 
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/auth/login`, body)
-
       
       localStorage.setItem("authToken", response.data.authToken)
       
@@ -41,6 +41,7 @@ function Login() {
       navigate("/logs")
 
       createToast("success", `Welcome ${body.email}!`)
+
     } catch (error) {
 
         console.log(error.response.data.errorMessage)
@@ -50,6 +51,11 @@ function Login() {
         }
     }
 
+  }
+
+  
+  if(isValidating){
+    return <Loading/>
   }
 
   if(isLoggedIn){
