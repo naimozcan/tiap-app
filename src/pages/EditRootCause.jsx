@@ -40,6 +40,7 @@ function EditRootCause() {
             navigate("/root-causes")
         } catch (error) {
             console.log(error)
+            createToast("danger", error.response.data.errorMessage)
         }
     }
 
@@ -71,7 +72,7 @@ function EditRootCause() {
                         <div>
 
                             <form onSubmit={handleEditRootCause}>
-                                <h2 className="text-xl mb-4">New Root Cause</h2>
+                                <h2 className="text-xl mb-4">Edit Root Cause</h2>
 
                                 <h6 className="mb-2">Title:</h6>
                                 <input type="text" name="title" value={rootcause.title} placeholder="type title here..." onChange={handleChange} className="w-full h-20 mb-3 bg-[#E0E0E0] rounded-lg p-3" />
