@@ -128,5 +128,5 @@ Key functionalities include exception management, monthly statistics, root cause
 [Slides Link](https://drive.google.com/file/d/17XfbTA0k-XnWR5mMsHag2n2y_nyqXMkR/view?usp=sharing)
 
 ### **Live App**
-https://sequences-app.vercel.app
+https://tiap-app.vercel.app
 
